@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class EmployeeService {
@@ -24,7 +25,7 @@ public class EmployeeService {
         Employee employee;
         try {
 
-            String query = "SELECT MANV, TEN, LUONG FROM NHANVIEN e WHERE e.LUONG < 10000";
+            String query = "SELECT MANV, TEN, LUONG FROM NHANVIEN WHERE LUONG < 10000";
             pStatement = connection.prepareStatement(query);
             ResultSet rs = pStatement.executeQuery();
 
@@ -134,7 +135,84 @@ public class EmployeeService {
         return listId;
     }
 
+    public List<String> getAllEmployeeIdFlyingBoeingAndAirBus() throws SQLException {
+        connection = JdbcConnectionDBUtil.getConnection();
+        PreparedStatement pStatement = null;
+        List<String> listEmployeeId = new ArrayList<>();
+        List<String> result = new ArrayList<>();
+        List<EmployeeIdTypePlane> employeeIdTypePlanes = new ArrayList<>();
+        try {
+            String queryEmployeeId = "SELECT MANV FROM NHANVIEN";
+            pStatement = connection.prepareStatement(queryEmployeeId);
+            ResultSet resultSet = pStatement.executeQuery();
+            while (resultSet.next()) {
+                listEmployeeId.add(resultSet.getString(1));
+            }
+
+            String query = "SELECT c.MANV, p.LOAI FROM CHUNGNHAN c join MAYBAY p on c.MAMB = p.MAMB";
+            pStatement = connection.prepareStatement(query);
+            ResultSet rs = pStatement.executeQuery();
+            EmployeeIdTypePlane employeeIdTypePlane;
+            while (rs.next()) {
+                employeeIdTypePlane = new EmployeeIdTypePlane();
+                employeeIdTypePlane.setEmployeeId(rs.getString(1));
+                employeeIdTypePlane.setTypePlane(rs.getString(2));
+                employeeIdTypePlanes.add(employeeIdTypePlane);
+            }
+
+            listEmployeeId.stream().forEach(employeeId -> {
+                boolean hasBoeing = false;
+                boolean hasAirbus = false;
+                for (EmployeeIdTypePlane employeeIdType: employeeIdTypePlanes) {
+                    if (employeeId.equals(employeeIdType.employeeId)) {
+                        if (employeeIdType.typePlane.contains("Boeing")) {
+                            hasBoeing = true;
+                        } else if (employeeIdType.typePlane.contains("Airbus")) {
+                            hasAirbus = true;
+                        }
+                    }
+                }
+                if (hasBoeing && hasAirbus) {
+                    result.add(employeeId);
+                }
+            });
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            pStatement.close();
+            connection.close();
+        }
+        return result;
+    }
+    class EmployeeIdTypePlane{
+        private String employeeId;
+
+        private String typePlane;
+
+        public EmployeeIdTypePlane() {
+        }
+
+        public String getEmployeeId() {
+            return employeeId;
+        }
+
+        public void setEmployeeId(String employeeId) {
+            this.employeeId = employeeId;
+        }
+
+        public String getTypePlane() {
+            return typePlane;
+        }
+
+        public void setTypePlane(String typePlane) {
+            this.typePlane = typePlane;
+        }
+    }
+
     public void displayListEmployee(List<Employee> employees) {
+        System.out.println("ID\tNAME\tSALARY:");
         for (Employee employee: employees) {
             System.out.println(" " + employee.getId() + "| " + employee.getName() + "| " + employee.getSalary());
         }

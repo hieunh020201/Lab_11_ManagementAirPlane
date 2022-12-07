@@ -18,6 +18,7 @@ public class Main {
             System.out.println("1. List of employee information");
             System.out.println("2. List of flight information");
             System.out.println("3. List of aircraft information");
+            System.out.println("4. Exit");
             Scanner scanner = new Scanner(System.in);
             String selection = scanner.nextLine();
             if (selection.equals("1")) {
@@ -28,6 +29,8 @@ public class Main {
                     System.out.println("3. Cho biết mã số của các phi công lái máy báy Boeing..");
                     System.out.println("4. Cho biết các nhân viên có thể lái máy bay có mã số 747.");
                     System.out.println("5. Cho biết tên của các phi công lái máy bay Boeing.");
+                    System.out.println("6. Cho biết mã số của các phi công vừa lái được Boeing vừa lái được Airbus.");
+                    System.out.println("7. Exit");
                     selection = scanner.nextLine();
                     switch (selection) {
                         case "1": {
@@ -56,13 +59,17 @@ public class Main {
                             employeeNames.stream().forEach(employeeName -> System.out.println(employeeName));
                             break;
                         }
+                        case "6": {
+                            List<String> employeeIds = employeeService.getAllEmployeeIdFlyingBoeingAndAirBus();
+                            employeeIds.stream().forEach(employeeId -> System.out.println(employeeId));
+                            break;
+                        }
+                        case "7": {
+                            notQuitSelectionOne = false;
+                            break;
+                        }
                         default: {
-                            if (selection.equals("Q") || selection.equals("q")) {
-                                notQuitSelectionOne = false;
-                                break;
-                            } else {
-                                System.out.println("Enter selection again!!");
-                            }
+                            System.out.println("Enter selection again!!");
                         }
                     }
                 }
@@ -74,6 +81,7 @@ public class Main {
                     System.out.println("3. Cho biết các chuyến bay xuất phát từ Sài Gòn (SGN) đi Ban Mê Thuộc (BMV).");
                     System.out.println("4. Có bao nhiêu chuyến bay xuất phát từ Sài Gòn (SGN)");
                     System.out.println("5. Cho biết các chuyến bay có thể ñược thực hiện bởi máy bay Airbus A320.");
+                    System.out.println("6. Exit");
                     String selectionOne = scanner.nextLine();
                     switch (selectionOne) {
                         case "1": {
@@ -101,13 +109,12 @@ public class Main {
                             flightService.displayListFlight(flights);
                             break;
                         }
+                        case "6": {
+                            notQuitSelectionTwo = false;
+                            break;
+                        }
                         default: {
-                            if (selectionOne.equals("Q") || selectionOne.equals("q")) {
-                                notQuitSelectionTwo = false;
-                                break;
-                            } else {
-                                System.out.println("Enter selection again!!");
-                            }
+                            System.out.println("Enter selection again!!");
                         }
                     }
                 }
@@ -118,6 +125,7 @@ public class Main {
                     System.out.println("2. Có bao nhiêu loại máy báy Boeing.");
                     System.out.println("3. Cho biết mã số của các loại máy bay mà nhân viên có họ Nguyễn có thể lái.");
                     System.out.println("4. Cho biết các loại máy bay có thể thực hiện chuyến bay VN280.");
+                    System.out.println("5. Exit");
                     selection = scanner.nextLine();
                     switch (selection) {
                         case "1": {
@@ -141,22 +149,19 @@ public class Main {
                             planeService.displayListPlane(planes);
                             break;
                         }
+                        case "5": {
+                            notQuitSelectionThree = false;
+                            break;
+                        }
                         default: {
-                            if (selection.equals("Q") || selection.equals("q")) {
-                                notQuitSelectionThree = false;
-                                break;
-                            } else {
-                                System.out.println("Enter selection again!!");
-                            }
+                            System.out.println("Enter selection again!!");
                         }
                     }
                 }
+            } else if (selection.equals("4")){
+                break;
             } else {
-                if (selection.equals("Q") || selection.equals("q")) {
-                    break;
-                } else {
-                    System.out.println("Enter selection again!!");
-                }
+                System.out.println("Enter selection again!!");
             }
         }
     }
