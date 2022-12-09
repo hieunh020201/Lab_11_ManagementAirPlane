@@ -1,4 +1,4 @@
-package service;
+package repository;
 
 import entity.Plane;
 import util.JdbcConnectionDBUtil;
@@ -10,12 +10,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlaneService {
+public class PlaneRepository {
     private Connection connection;
-
-    public PlaneService() throws SQLException {
-        this.connection = JdbcConnectionDBUtil.getConnection();
-    }
 
     public List<Plane> getAllPlanesHasFlyingRangeHigher10000() throws SQLException {
         connection = JdbcConnectionDBUtil.getConnection();
@@ -40,36 +36,35 @@ public class PlaneService {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            pStatement.close();
+            if (pStatement != null){
+                pStatement.close();
+            }
             connection.close();
         }
         return planes;
     }
 
-    public List<Plane> getAllPlanesHasTypeIsBoeing() throws SQLException {
+    public int countNumberPlanesHasTypeIsBoeing() throws SQLException {
         connection = JdbcConnectionDBUtil.getConnection();
-        List<Plane> planes = new ArrayList<>();
         PreparedStatement pStatement = null;
-        Plane plane;
+        int number = 0;
         try {
-            String query = "SELECT MAMB, LOAI, TAMBAY FROM MAYBAY p WHERE p.LOAI LIKE '%Boeing%'";
+            String query = "SELECT COUNT(p.MAMB) FROM MAYBAY p WHERE p.LOAI LIKE '%Boeing%'";
             pStatement = connection.prepareStatement(query);
             ResultSet rs = pStatement.executeQuery();
 
             while(rs.next()){
-                plane = new Plane();
-                plane.setId(rs.getInt(1));
-                plane.setType(rs.getString(2));
-                plane.setFlyingRange(rs.getInt(3));
-                planes.add(plane);
+                number = rs.getInt(1);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            pStatement.close();
+            if (pStatement != null){
+                pStatement.close();
+            }
             connection.close();
         }
-        return planes;
+        return number;
     }
 
     public List<Integer> getAllPlaneIdOfPilotHasNameIsNguyen() throws SQLException {
@@ -78,7 +73,7 @@ public class PlaneService {
         PreparedStatement pStatement = null;
         try {
             String query = "SELECT c.MAMB FROM NHANVIEN e " +
-                    "join CHUNGNHAN c on e.MANV = c.MANV WHERE e.TEN LIKE 'Nguyen%'";
+                    "JOIN CHUNGNHAN c ON e.MANV = c.MANV WHERE e.TEN LIKE 'Nguyen%'";
             pStatement = connection.prepareStatement(query);
             ResultSet rs = pStatement.executeQuery();
 
@@ -88,7 +83,9 @@ public class PlaneService {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            pStatement.close();
+            if (pStatement != null){
+                pStatement.close();
+            }
             connection.close();
         }
         return listPlaneId;
@@ -115,7 +112,9 @@ public class PlaneService {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            pStatement.close();
+            if (pStatement != null){
+                pStatement.close();
+            }
             connection.close();
         }
         return planes;
