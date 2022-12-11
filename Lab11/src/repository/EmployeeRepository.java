@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class EmployeeRepository {
@@ -191,6 +192,126 @@ public class EmployeeRepository {
             connection.close();
         }
         return result;
+    }
+
+    public List<String> getAllEmployeeIdFlyingThreePlanes() throws SQLException {
+        connection = JdbcConnectionDBUtil.getConnection();
+        PreparedStatement pStatement = null;
+        List<String> listId = new ArrayList<>();
+        try {
+            String query = "SELECT MANV FROM CHUNGNHAN GROUP BY MANV HAVING COUNT(MAMB) = 3";
+            pStatement = connection.prepareStatement(query);
+            ResultSet rs = pStatement.executeQuery();
+            while (rs.next()) {
+                listId.add(rs.getString(1));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (pStatement != null){
+                pStatement.close();
+            }
+            connection.close();
+        }
+        return listId;
+    }
+
+    public HashMap<String, Integer> getAllEmployeeIdFlyMoreThreePlanes() throws SQLException {
+        connection = JdbcConnectionDBUtil.getConnection();
+        HashMap<String, Integer> listEmployeeId = new HashMap<>();
+
+        PreparedStatement pStatement = null;
+        try {
+            String query = "SELECT MANV, MAMB FROM CHUNGNHAN WHERE MANV IN " +
+                    "(SELECT MANV FROM CHUNGNHAN GROUP BY MANV HAVING COUNT(MAMB) > 3)";
+            pStatement = connection.prepareStatement(query);
+            ResultSet rs = pStatement.executeQuery();
+
+            while(rs.next()){
+                listEmployeeId.put(rs.getString(1), rs.getInt(2));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (pStatement != null){
+                pStatement.close();
+            }
+            connection.close();
+        }
+        return listEmployeeId;
+    }
+    public List<Employee> getAllEmployeesAreNotPilots() throws SQLException {
+        connection = JdbcConnectionDBUtil.getConnection();
+        List<Employee> employees = new ArrayList<>();
+        PreparedStatement pStatement = null;
+        Employee employee;
+        try {
+
+            String query = "SELECT MANV, TEN, LUONG FROM NHANVIEN WHERE MANV NOT IN (SELECT DISTINCT MANV FROM CHUNGNHAN)";
+            pStatement = connection.prepareStatement(query);
+            ResultSet rs = pStatement.executeQuery();
+
+            while(rs.next()){
+                employee = new Employee();
+                employee.setId(rs.getString(1));
+                employee.setName(rs.getString(2));
+                employee.setSalary(rs.getInt(3));
+                employees.add(employee);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (pStatement != null){
+                pStatement.close();
+            }
+            connection.close();
+        }
+        return employees;
+    }
+
+    public List<String> get10EmployeeIdHasHighestSalary() throws SQLException {
+        connection = JdbcConnectionDBUtil.getConnection();
+        PreparedStatement pStatement = null;
+        List<String> listId = new ArrayList<>();
+        try {
+            String query = "SELECT TOP 10 MANV FROM NHANVIEN ORDER BY LUONG DESC";
+            pStatement = connection.prepareStatement(query);
+            ResultSet rs = pStatement.executeQuery();
+            while (rs.next()) {
+                listId.add(rs.getString(1));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (pStatement != null){
+                pStatement.close();
+            }
+            connection.close();
+        }
+        return listId;
+    }
+
+    public int calculateTotalSalaryOfPilots() throws SQLException {
+        connection = JdbcConnectionDBUtil.getConnection();
+        PreparedStatement pStatement = null;
+        int totalSalary = 0;
+        try {
+
+            String query = "SELECT SUM(LUONG) FROM NHANVIEN WHERE MANV IN (SELECT DISTINCT MANV FROM CHUNGNHAN)";
+            pStatement = connection.prepareStatement(query);
+            ResultSet rs = pStatement.executeQuery();
+            while (rs.next()) {
+                totalSalary = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (pStatement != null){
+                pStatement.close();
+            }
+            connection.close();
+        }
+        return totalSalary;
     }
 
     public void displayListEmployee(List<Employee> employees) {
