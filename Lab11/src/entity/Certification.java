@@ -3,7 +3,7 @@ package entity;
 public class Certification {
     private String employeeId;
 
-    private String planeId;
+    private int planeId;
 
     public Certification() {
     }
@@ -16,11 +16,11 @@ public class Certification {
         this.employeeId = employeeId;
     }
 
-    public String getPlaneId() {
+    public int getPlaneId() {
         return planeId;
     }
 
-    public void setPlaneId(String planeId) {
+    public void setPlaneId(int planeId) {
         this.planeId = planeId;
     }
 }

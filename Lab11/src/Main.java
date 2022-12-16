@@ -32,7 +32,13 @@ public class Main {
                     System.out.println("4. Cho biết các nhân viên có thể lái máy bay có mã số 747.");
                     System.out.println("5. Cho biết tên của các phi công lái máy bay Boeing.");
                     System.out.println("6. Cho biết mã số của các phi công vừa lái được Boeing vừa lái được Airbus.");
-                    System.out.println("7. Exit");
+                    System.out.println("7. Cho biết mã số của các phi công chỉ lái được 3 loại máy bay.");
+                    System.out.println("8. Với mỗi phi công có thể lái nhiều hơn 3 loại máy bay, cho biết mã số phi công và tầm bay lớn nhất của các loại máy bay.");
+                    System.out.println("9. Với mỗi phi công cho biết mã số phi công và tổng số loại máy bay mà phi công đó có thể lái.");
+                    System.out.println("10. Tìm các nhân viên không phải là phi công.");
+                    System.out.println("11. Cho biết mã số của các nhân viên có lương cao nhất.");
+                    System.out.println("12. Cho biết tổng số lương phải trả cho các phi công.");
+                    System.out.println("13. Exit");
                     selection = scanner.nextLine();
                     switch (selection) {
                         case get_employees_salary_less_10000: {
@@ -66,6 +72,36 @@ public class Main {
                             employeeIds.stream().forEach(employeeId -> System.out.println(employeeId));
                             break;
                         }
+                        case number_pilots_flying_three_types_plane: {
+                            List<String> employeeIds = employeeRepository.getAllEmployeeIdFlyingThreePlanes();
+                            employeeIds.stream().forEach(employeeId -> System.out.println(employeeId));
+                            break;
+                        }
+                        case highest_flying_range_of_planes: {
+                            List<String> employeeIds = employeeRepository.getAllEmployeeIdFlyingBoeingAndAirBus();
+                            employeeIds.stream().forEach(employeeId -> System.out.println(employeeId));
+                            break;
+                        }
+                        case total_planes_by_flying_pilots: {
+                            List<String> employeeIds = employeeRepository.getAllEmployeeIdFlyingBoeingAndAirBus();
+                            employeeIds.stream().forEach(employeeId -> System.out.println(employeeId));
+                            break;
+                        }
+                        case number_employees_are_not_pilot: {
+                            List<String> employeeIds = employeeRepository.getAllEmployeeIdFlyingBoeingAndAirBus();
+                            employeeIds.stream().forEach(employeeId -> System.out.println(employeeId));
+                            break;
+                        }
+                        case id_of_employees_has_highest_salary: {
+                            List<String> employeeIds = employeeRepository.getAllEmployeeIdFlyingBoeingAndAirBus();
+                            employeeIds.stream().forEach(employeeId -> System.out.println(employeeId));
+                            break;
+                        }
+                        case total_salary_paying_pilots: {
+                            List<String> employeeIds = employeeRepository.getAllEmployeeIdFlyingBoeingAndAirBus();
+                            employeeIds.stream().forEach(employeeId -> System.out.println(employeeId));
+                            break;
+                        }
                         case exit_options_manage_employees: {
                             notQuitSelectionOne = false;
                             break;
@@ -83,7 +119,13 @@ public class Main {
                     System.out.println("3. Cho biết các chuyến bay xuất phát từ Sài Gòn (SGN) đi Ban Mê Thuộc (BMV).");
                     System.out.println("4. Có bao nhiêu chuyến bay xuất phát từ Sài Gòn (SGN)");
                     System.out.println("5. Cho biết các chuyến bay có thể được thực hiện bởi máy bay Airbus A320.");
-                    System.out.println("6. Exit");
+                    System.out.println("6. các đường có thể bay thẳng từ ga A đến ga B rồi quay trở về ga A.");
+                    System.out.println("7. Với mỗi ga có chuyến bay xuất phát từ đó cho biết có bao nhiêu chuyến bay khởi hành từ ga đó.");
+                    System.out.println("8. Với mỗi ga có chuyến bay xuất phát từ đó cho biết tổng chi phí phải trả cho phi công lái các chuyến bay khởi hành từ ga đó.");
+                    System.out.println("9. Cho biết danh sách các chuyến bay có thể khởi hành trước 12:00.");
+                    System.out.println("10. Với mỗi địa điểm xuất phát cho biết có bao nhiêu chuyến bay có thể khởi hành trước 12:00..");
+                    System.out.println("11. Tìm các chuyến bay có thể được thực hiện bởi tất cả các loại máy bay Boeing.");
+                    System.out.println("12. Exit");
                     String selectionOne = scanner.nextLine();
                     switch (selectionOne) {
                         case flights_arrive_DaLat: {
@@ -111,6 +153,36 @@ public class Main {
                             flightRepository.displayListFlight(flights);
                             break;
                         }
+                        case round_trip_flights: {
+                            List<Flight> flights = flightRepository.getAllFlightsByMakingAirbusA320();
+                            flightRepository.displayListFlight(flights);
+                            break;
+                        }
+                        case number_flights_depart_from_airport: {
+                            List<Flight> flights = flightRepository.getAllFlightsByMakingAirbusA320();
+                            flightRepository.displayListFlight(flights);
+                            break;
+                        }
+                        case total_salary_paying_pilots_of_airport: {
+                            List<Flight> flights = flightRepository.getAllFlightsByMakingAirbusA320();
+                            flightRepository.displayListFlight(flights);
+                            break;
+                        }
+                        case flights_depart_before_12AM: {
+                            List<Flight> flights = flightRepository.getAllFlightsByMakingAirbusA320();
+                            flightRepository.displayListFlight(flights);
+                            break;
+                        }
+                        case flights_depart_before_12AM_of_airport: {
+                            List<Flight> flights = flightRepository.getAllFlightsByMakingAirbusA320();
+                            flightRepository.displayListFlight(flights);
+                            break;
+                        }
+                        case flights_by_making_plane_type_Boeing: {
+                            List<Flight> flights = flightRepository.getAllFlightsByMakingAirbusA320();
+                            flightRepository.displayListFlight(flights);
+                            break;
+                        }
                         case exit_options_manage_flights: {
                             notQuitSelectionTwo = false;
                             break;
@@ -127,7 +199,8 @@ public class Main {
                     System.out.println("2. Có bao nhiêu loại máy báy Boeing.");
                     System.out.println("3. Cho biết mã số của các loại máy bay mà nhân viên có họ Nguyễn có thể lái.");
                     System.out.println("4. Cho biết các loại máy bay có thể thực hiện chuyến bay VN280.");
-                    System.out.println("5. Exit");
+                    System.out.println("5. Mã số, loại máy báy và tổng số phi công có thể lái loại máy bay đó.");
+                    System.out.println("6. Exit");
                     selection = scanner.nextLine();
                     switch (selection) {
                         case planes_flying_range_higher_10000: {
@@ -147,6 +220,11 @@ public class Main {
                             break;
                         }
                         case planes_make_flight_VN280: {
+                            List<Plane> planes = planeRepository.getAllPlanesMakeFlightVN280();
+                            planeRepository.displayListPlane(planes);
+                            break;
+                        }
+                        case total_pilots_fly_planes: {
                             List<Plane> planes = planeRepository.getAllPlanesMakeFlightVN280();
                             planeRepository.displayListPlane(planes);
                             break;
