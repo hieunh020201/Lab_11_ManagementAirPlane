@@ -38,16 +38,33 @@ public class PlaneService {
     }
 
     public void getListPilotIdAndFlyingRange() throws SQLException {
-        List<Plane> planes = planeRepository.getAllPlanes();
-        HashMap<String, Integer> listEmployeeId = employeeRepository.getAllEmployeeIdFlyMoreThreePlanes();
-        planes.stream().forEach(plane -> {
-            listEmployeeId.forEach((employeeId, planeId) -> {
-                if (plane.getId() == planeId) {
-                    System.out.println("Employee Id: " + employeeId + "\t");
-                }
-            });
-
-        });
+//        List<Plane> planes = planeRepository.getAllPlanes();
+//        HashMap<String, Integer> listEmployeeId = employeeRepository.getAllEmployeeIdFlyMoreThreePlanes();
+//        planes.stream().forEach(plane -> {
+//            listEmployeeId.forEach((employeeId, planeId) -> {
+//                if (plane.getId() == planeId) {
+//                    System.out.println("Employee Id: " + employeeId + "\t");
+//                }
+//            });
+//        });
+//        String id = "";
+//        List<Plane> planeList = new ArrayList<>();
+//        listEmployeeId.forEach((employeeId, planeId) -> {
+//            if (employeeId.equals(id)) {
+//
+//            } else {
+//                if (!planeList.isEmpty()) {
+//                    planeList.removeAll(planeList);
+//                }
+//
+//                id = employeeId;
+//            }
+//            planes.stream().forEach(plane -> {
+//                if (plane.getId() == planeId) {
+//                    planeList.add(plane);
+//                }
+//            });
+//        });
 
     }
 }

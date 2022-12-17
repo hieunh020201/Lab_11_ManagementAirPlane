@@ -2,6 +2,7 @@ package repository;
 
 import entity.Employee;
 import entity.EmployeeIdTypePlane;
+import entity.Plane;
 import util.JdbcConnectionDBUtil;
 
 import java.sql.Connection;
@@ -240,6 +241,30 @@ public class EmployeeRepository {
         }
         return listEmployeeId;
     }
+
+    public HashMap<String, Integer> getTotalPlanesByFlyingPilot() throws SQLException {
+        connection = JdbcConnectionDBUtil.getConnection();
+        HashMap<String, Integer> totalPlanes = new HashMap<>();
+        PreparedStatement pStatement = null;
+        Plane plane;
+        try {
+            String query = "SELECT MANV, COUNT(MAMB) FROM CHUNGNHAN GROUP BY MANV";
+            pStatement = connection.prepareStatement(query);
+            ResultSet rs = pStatement.executeQuery();
+
+            while(rs.next()){
+                totalPlanes.put(rs.getString(1), rs.getInt(2));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (pStatement != null){
+                pStatement.close();
+            }
+            connection.close();
+        }
+        return totalPlanes;
+    }
     public List<Employee> getAllEmployeesAreNotPilots() throws SQLException {
         connection = JdbcConnectionDBUtil.getConnection();
         List<Employee> employees = new ArrayList<>();
@@ -314,10 +339,5 @@ public class EmployeeRepository {
         return totalSalary;
     }
 
-    public void displayListEmployee(List<Employee> employees) {
-        System.out.println("ID\tNAME\tSALARY:");
-        for (Employee employee: employees) {
-            System.out.println(" " + employee.getId() + "| " + employee.getName() + "| " + employee.getSalary());
-        }
-    }
+
 }

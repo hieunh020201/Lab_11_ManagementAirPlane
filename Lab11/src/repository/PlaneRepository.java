@@ -152,30 +152,6 @@ public class PlaneRepository {
         return planes;
     }
 
-    public HashMap<String, Integer> getTotalPlanesByFlyingPilot() throws SQLException {
-        connection = JdbcConnectionDBUtil.getConnection();
-        HashMap<String, Integer> totalPlanes = new HashMap<>();
-        PreparedStatement pStatement = null;
-        Plane plane;
-        try {
-            String query = "SELECT MANV, COUNT(MAMB) FROM CHUNGNHAN GROUP BY MANV";
-            pStatement = connection.prepareStatement(query);
-            ResultSet rs = pStatement.executeQuery();
-
-            while(rs.next()){
-                totalPlanes.put(rs.getString(1), rs.getInt(2));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (pStatement != null){
-                pStatement.close();
-            }
-            connection.close();
-        }
-        return totalPlanes;
-    }
-
     public void displayListPlane(List<Plane> planes) {
         System.out.println("ID\tTYPE\tFlying Range:");
         for (Plane plane: planes) {

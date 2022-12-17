@@ -222,7 +222,7 @@ public class FlightRepository {
         return numberFlights;
     }
 
-    public HashMap<String, Integer> totalFeePayingFlightsFromAirport() throws SQLException {
+    public HashMap<String, Integer> totalSalaryPayingFlightsFromAirport() throws SQLException {
         connection = JdbcConnectionDBUtil.getConnection();
         HashMap<String, Integer> totalFee = new HashMap<>();
 
@@ -303,11 +303,5 @@ public class FlightRepository {
         return numberFlights;
     }
 
-    public void displayListFlight(List<Flight> flights) {
-        System.out.println("ID\tDEPART\tARRIVE\tLENGTH\tDEPARTURE TIME\tARRIVE TIME\tCOST:");
-        for (Flight flight: flights) {
-            System.out.println(" " + flight.getId() + "| " + flight.getDepart() + "| " + flight.getArrive()
-                    + "| " + flight.getLength() + "| " + flight.getDepartureTime() + "| " + flight.getArriveTime() + "| " + flight.getCost());
-        }
-    }
+
 }

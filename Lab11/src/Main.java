@@ -4,8 +4,12 @@ import entity.Plane;
 import repository.EmployeeRepository;
 import repository.FlightRepository;
 import repository.PlaneRepository;
+import service.EmployeeService;
+import service.FlightService;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -16,6 +20,9 @@ public class Main {
         EmployeeRepository employeeRepository = new EmployeeRepository();
         PlaneRepository planeRepository = new PlaneRepository();
         FlightRepository flightRepository = new FlightRepository();
+
+        EmployeeService employeeService = new EmployeeService();
+        FlightService flightService = new FlightService();
         while (true) {
             System.out.println("1. List of employee information");
             System.out.println("2. List of flight information");
@@ -43,7 +50,7 @@ public class Main {
                     switch (selection) {
                         case get_employees_salary_less_10000: {
                             List<Employee> employees = employeeRepository.getAllEmployeeHasSalaryHigher10000();
-                            employeeRepository.displayListEmployee(employees);
+                            employeeService.displayListEmployee(employees);
                             break;
                         }
                         case total_salary_to_paid: {
@@ -59,7 +66,7 @@ public class Main {
                         }
                         case employee_flying_plane_747: {
                             List<Employee> employees = employeeRepository.getAllEmployeeFlyingPlane747();
-                            employeeRepository.displayListEmployee(employees);
+                            employeeService.displayListEmployee(employees);
                             break;
                         }
                         case name_of_employees_flying_Boeing: {
@@ -83,23 +90,22 @@ public class Main {
                             break;
                         }
                         case total_planes_by_flying_pilots: {
-                            List<String> employeeIds = employeeRepository.getAllEmployeeIdFlyingBoeingAndAirBus();
-                            employeeIds.stream().forEach(employeeId -> System.out.println(employeeId));
+                            employeeService.getTotalPlanesByFlyingPilot();
                             break;
                         }
                         case number_employees_are_not_pilot: {
-                            List<String> employeeIds = employeeRepository.getAllEmployeeIdFlyingBoeingAndAirBus();
-                            employeeIds.stream().forEach(employeeId -> System.out.println(employeeId));
+                            List<Employee> employees = employeeRepository.getAllEmployeesAreNotPilots();
+                            employeeService.displayListEmployee(employees);
                             break;
                         }
                         case id_of_employees_has_highest_salary: {
-                            List<String> employeeIds = employeeRepository.getAllEmployeeIdFlyingBoeingAndAirBus();
+                            List<String> employeeIds = employeeRepository.get10EmployeeIdHasHighestSalary();
                             employeeIds.stream().forEach(employeeId -> System.out.println(employeeId));
                             break;
                         }
                         case total_salary_paying_pilots: {
-                            List<String> employeeIds = employeeRepository.getAllEmployeeIdFlyingBoeingAndAirBus();
-                            employeeIds.stream().forEach(employeeId -> System.out.println(employeeId));
+                            int totalSalary = employeeRepository.calculateTotalSalaryOfPilots();
+                            System.out.println("Total Salary is: " + totalSalary);
                             break;
                         }
                         case exit_options_manage_employees: {
@@ -130,17 +136,17 @@ public class Main {
                     switch (selectionOne) {
                         case flights_arrive_DaLat: {
                             List<Flight> flights = flightRepository.getAllFlightsToDaLat();
-                            flightRepository.displayListFlight(flights);
+                            flightService.displayListFlight(flights);
                             break;
                         }
                         case flights_has_length_8000_10000: {
                             List<Flight> flights = flightRepository.getAllFlightsHasLengthFrom8000To10000();
-                            flightRepository.displayListFlight(flights);
+                            flightService.displayListFlight(flights);
                             break;
                         }
                         case flights_from_SGN_to_BMV: {
                             List<Flight> flights = flightRepository.getAllFlightsArriveFromSGNToBMV();
-                            flightRepository.displayListFlight(flights);
+                            flightService.displayListFlight(flights);
                             break;
                         }
                         case number_flights_from_SGN: {
@@ -150,37 +156,43 @@ public class Main {
                         }
                         case flights_by_making_AirbusA320: {
                             List<Flight> flights = flightRepository.getAllFlightsByMakingAirbusA320();
-                            flightRepository.displayListFlight(flights);
+                            flightService.displayListFlight(flights);
                             break;
                         }
                         case round_trip_flights: {
-                            List<Flight> flights = flightRepository.getAllFlightsByMakingAirbusA320();
-                            flightRepository.displayListFlight(flights);
+                            List<String> flights = flightRepository.getAllRoundTripFlight();
+                            flights.stream().forEach(flight -> System.out.println(flight));
                             break;
                         }
                         case number_flights_depart_from_airport: {
-                            List<Flight> flights = flightRepository.getAllFlightsByMakingAirbusA320();
-                            flightRepository.displayListFlight(flights);
+                            HashMap<String, Integer> flights = flightRepository.numberOfFlightsDepartingFromAirport();
+                            flights.forEach((depart, numberFlights) -> {
+                                System.out.println(depart + ": " + numberFlights);
+                            });
                             break;
                         }
                         case total_salary_paying_pilots_of_airport: {
-                            List<Flight> flights = flightRepository.getAllFlightsByMakingAirbusA320();
-                            flightRepository.displayListFlight(flights);
+                            HashMap<String, Integer> flights = flightRepository.totalSalaryPayingFlightsFromAirport();
+                            flights.forEach((depart, totalSalary) -> {
+                                System.out.println(depart + ": " + totalSalary);
+                            });
                             break;
                         }
                         case flights_depart_before_12AM: {
-                            List<Flight> flights = flightRepository.getAllFlightsByMakingAirbusA320();
-                            flightRepository.displayListFlight(flights);
+                            List<Flight> flights = flightRepository.getAllFlightsDepartBefore12AM();
+                            flightService.displayListFlight(flights);
                             break;
                         }
                         case flights_depart_before_12AM_of_airport: {
-                            List<Flight> flights = flightRepository.getAllFlightsByMakingAirbusA320();
-                            flightRepository.displayListFlight(flights);
+                            HashMap<String, Integer> flights = flightRepository.numberFlightsDepartBefore12AM();
+                            flights.forEach((depart, totalSalary) -> {
+                                System.out.println(depart + ": " + totalSalary);
+                            });
                             break;
                         }
                         case flights_by_making_plane_type_Boeing: {
-                            List<Flight> flights = flightRepository.getAllFlightsByMakingAirbusA320();
-                            flightRepository.displayListFlight(flights);
+                            List<Flight> flights = new ArrayList<>();
+                            flightService.displayListFlight(flights);
                             break;
                         }
                         case exit_options_manage_flights: {
