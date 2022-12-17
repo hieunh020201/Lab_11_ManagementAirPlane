@@ -1,6 +1,6 @@
 out/
 .idea/
-Lab11/.idea_modules/
-Lab11/*.iml
-Lab11/*.ipr
-Lab11/*.iws
+.idea_modules/
+*.iml
+*.ipr
+*.iws
